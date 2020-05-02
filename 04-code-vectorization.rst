@@ -111,8 +111,8 @@ dead. Every cell interacts with its eight neighbours, which are the cells that
 are directly horizontally, vertically, or diagonally adjacent. At each step in
 time, the following transitions occur:
 
-1. Any live cell with fewer than two live neighbours dies, as if by needs
-   caused by underpopulation.
+1. Any live cell with fewer than two live neighbours dies, as if by 
+   underpopulation.
 2. Any live cell with more than three live neighbours dies, as if by
    overcrowding.
 3. Any live cell with two or three live neighbours lives, unchanged, to the
@@ -157,7 +157,7 @@ Taking the border into account, counting neighbours then is straightforward:
 
    def compute_neighbours(Z):
        shape = len(Z), len(Z[0])
-       N  = [[0,]*(shape[0]) for i in range(shape[1])]
+       N  = [[0,]*(shape[1]) for i in range(shape[0])]
        for x in range(1,shape[0]-1):
            for y in range(1,shape[1]-1):
                N[x][y] = Z[x-1][y-1]+Z[x][y-1]+Z[x+1][y-1] \
@@ -806,7 +806,7 @@ We're ready to write our three rules:
 
    # Normalize the result
    norm = np.sqrt((target*target).sum(axis=1)).reshape(n, 1)
-   target *= np.divide(target, norm, out=target, where=norm != 0)
+   np.divide(target, norm, out=target, where=norm != 0)
 
    # Alignment at constant speed
    target *= max_velocity
@@ -827,7 +827,7 @@ We're ready to write our three rules:
 
    # Normalize the result
    norm = np.sqrt((target*target).sum(axis=1)).reshape(n, 1)
-   target *= np.divide(target, norm, out=target, where=norm != 0)
+   np.divide(target, norm, out=target, where=norm != 0)
 
    # Cohesion at constant speed (max_velocity)
    target *= max_velocity
@@ -843,15 +843,15 @@ We're ready to write our three rules:
    repulsion = np.dstack((dx, dy))
 
    # Force is inversely proportional to the distance
-   repulsion = np.divide(repulsion, distance.reshape(n, n, 1)**2, out=repulsion,
-                         where=distance.reshape(n, n, 1) != 0)
+   np.divide(repulsion, distance.reshape(n, n, 1)**2, out=repulsion,
+             where=distance.reshape(n, n, 1) != 0)
 
    # Compute direction away from others
    target = (repulsion*mask.reshape(n, n, 1)).sum(axis=1)/count.reshape(n, 1)
 
    # Normalize the result
    norm = np.sqrt((target*target).sum(axis=1)).reshape(n, 1)
-   target *= np.divide(target, norm, out=target, where=norm != 0)
+   np.divide(target, norm, out=target, where=norm != 0)
 
    # Separation at constant speed (max_velocity)
    target *= max_velocity
